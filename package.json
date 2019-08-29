@@ -5,7 +5,7 @@
     "main": "lib",
     "typings": "lib",
     "scripts": {
-        "prepare": "npm run build && npm run test",
+        "prepare": "npm run build",
         "build": "tsc",
         "test": "jasmine"
     },
