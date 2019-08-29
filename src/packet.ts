@@ -4,28 +4,27 @@ export interface Packet {
     payload: string
 }
 
-export function encodePacket(packet: Packet): Buffer {
-    const payloadSize = Buffer.byteLength(packet.payload)
-    const buffer = Buffer.alloc(payloadSize + 14)
-
-    buffer.writeInt32LE(payloadSize + 10, 0)
-    buffer.writeInt32LE(packet.id, 4)
-    buffer.writeInt32LE(packet.type, 8)
-    buffer.write(packet.payload, 12)
-    buffer.fill(0, payloadSize + 12)
-
-    return buffer
+export function encodePacket(body: Packet): Buffer {
+    console.log(body);
+    var size   = Buffer.byteLength(body.payload) + 14,
+      buffer = new Buffer(size);
+    buffer.writeInt32LE(size - 4, 0);
+    buffer.writeInt32LE(body.id,       4);
+    buffer.writeInt32LE(body.type,     8);
+    buffer.write(body.payload, 12, size - 2, "ascii");
+    buffer.writeInt16LE(0, size - 2);
+    return buffer;
 }
 
 export function decodePacket(buffer: Buffer): Packet {
-    const length = buffer.readInt32LE(0)
-    const id = buffer.readInt32LE(4)
-    const type = buffer.readInt32LE(8)
-    const payload = buffer.toString("utf-8", 12, length + 2)
-
-    return {
-        id, type, payload
-    }
+    console.log(buffer);
+      var response = {
+        size: buffer.readInt32LE(0),
+        id:   buffer.readInt32LE(4),
+        type: buffer.readInt32LE(8),
+        payload: buffer.toString("ascii", 12, buffer.length - 2),
+      };
+      return response;
 }
 
 export enum PacketType {

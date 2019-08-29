@@ -1,10 +1,10 @@
-import { Rcon } from "../src"
+const { Rcon } = require("../lib/rcon")
 
 async function main() {
     const rcon = new Rcon({
-        host: "localhost",
-        port: 25575,
-        password: "1234"
+        host: "68.232.163.112",
+        port: 9046,
+        password: "Cyanide415!"
     })
 
     rcon.on("connect", () => console.log("connected"))
@@ -13,9 +13,7 @@ async function main() {
 
     await rcon.connect()
 
-    console.log(await rcon.send("/list"))
-
-    await Promise.all([...Array(10)].map((_, i) => rcon.send(`/say ${i}`)))
+    console.log(await rcon.send('say "this is a test"'))
 
     rcon.end()
 }
