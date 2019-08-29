@@ -5,9 +5,8 @@ export interface Packet {
 }
 
 export function encodePacket(body: Packet): Buffer {
-  console.log(body);
-  var size = Buffer.byteLength(body.payload) + 14,
-    buffer = new Buffer(size);
+  const size = Buffer.byteLength(body.payload) + 14;
+  const buffer = new Buffer(size);
   buffer.writeInt32LE(size - 4, 0);
   buffer.writeInt32LE(body.id, 4);
   buffer.writeInt32LE(body.type, 8);
@@ -17,7 +16,6 @@ export function encodePacket(body: Packet): Buffer {
 }
 
 export function decodePacket(buffer: Buffer): Packet {
-  console.log(buffer);
   var response = {
     size: buffer.readInt32LE(0),
     id: buffer.readInt32LE(4),
